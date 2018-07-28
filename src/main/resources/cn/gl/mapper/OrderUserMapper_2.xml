@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gl.mapper.OrderUserMapper_2">
+
+    <resultMap id="orderUser_2" type="OrderUser_2">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="number" column="number"/>
+        <result property="createtime" column="createtime"/>
+        <result property="note" column="note"/>
+        <association property="user" javaType="User">
+            <id property="id" column="user_id"></id>
+            <result property="username" column="username"/>
+            <result property="address" column="address"/>
+        </association>
+    </resultMap>
+
+     <select id="getAllOrderUser_2" resultMap="orderUser_2">
+         select o.id,o.user_id,o.number,o.createtime,u.username,u.address
+         from orders o
+         left join user u
+         on o.user_id = u.id
+     </select>
+
+ </mapper>

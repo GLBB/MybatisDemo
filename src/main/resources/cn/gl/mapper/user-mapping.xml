@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gl.pojo">
+
+
+
+    <select id="selectUserById" parameterType="Integer" resultType="user">
+        select * from user where id = #{value}
+    </select>
+
+    <!-- //根据用户名称模糊查询用户列表
+	#{}    select * from user where id = ？    占位符  ? ==  '五'
+	${}    select * from user where username like '%五%'  字符串拼接
+
+	 -->
+    <select id="selectUserByUsername" parameterType="String" resultType="cn.gl.pojo.User">
+      <!-- 第一种  select * from user where username like "%${value}%"
+                select * from user where username like "%小%"
+
+            第二种 select * from user where username like "%"'小'"%"
+       -->
+        select * from user where username like "%"#{v}"%"
+
+    </select>
+
+    <!-- 添加用户  -->
+    <insert id="insertUser" parameterType="cn.gl.pojo.User">
+        insert into user (username,birthday,sex,address) values (#{username},#{date},#{sex},#{address})
+    </insert>
+
+    <insert id="insertUserAndGetUserId" parameterType="cn.gl.pojo.User">
+         <selectKey keyProperty="id" resultType="Integer" order="AFTER">
+             select LAST_INSERT_ID()
+         </selectKey>
+        insert into user (username,birthday,sex,address) values (#{username},#{date},#{sex},#{address})
+    </insert>
+
+    <update id="updateUser" parameterType="cn.gl.pojo.User">
+        update user set username = #{username},sex = #{sex},birthday=#{date},address=#{address} where id = #{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="Integer">
+        delete from user where id = #{id}
+    </delete>
+</mapper>

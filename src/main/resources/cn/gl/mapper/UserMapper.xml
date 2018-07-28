@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gl.mapper.UserMapper">
+    <sql id="selectPre" >
+        select * from user
+    </sql>
+
+    <!-- 采用动态代理的方式 , 不用写实现类-->
+    <select id="selectUserById" parameterType="Integer" resultType="cn.gl.pojo.User">
+         <include refid="selectPre"/> where id = #{value}
+    </select>
+
+    <select id="selectUserByUsername" parameterType="QueryVo" resultType="User">
+        select * from user where username like "%"#{user.username}"%"
+    </select>
+
+    <select id="countUser" resultType="Integer">
+        select count(*) from user
+    </select>
+
+    <select id="getUserBySexAndUsername" parameterType="User" resultType="User">
+<!--        select * from user where sex = #{sex} and username like "%"#{username}"%"   -->
+   <!--
+          select * from user
+          where
+          1 = 1
+          <if test="sex!=null and sex != '' ">
+              and sex = #{sex}
+          </if>
+          <if test="username!=null and username!=''">
+              and username like "%"#{username}"%"
+          </if>
+          -->
+        select * from user
+        <where>
+            <if test="sex!=null and sex != '' ">
+                and sex = #{sex}
+            </if>
+            <if test="username!=null and username!=''">
+                and username like "%"#{username}"%"
+            </if>
+        </where>
+    </select>
+
+    <select id="getUsersByIds" parameterType="QueryVo" resultType="User">
+        select * from user 
+        <where>
+            <foreach collection="ids" open="id in (" separator="," close=")" item="id">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+
+
+
+</mapper>
